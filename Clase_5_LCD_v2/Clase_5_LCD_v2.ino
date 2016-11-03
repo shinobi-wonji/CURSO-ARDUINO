@@ -57,27 +57,34 @@ void printMotorStatusLcd()
     lcd.print("Motor Apagado  ");
 }
 
-void setup() {
-  // put your setup code here, to run once:
+void actualizarTemp()
+{
+  int analog = 0;
+  analog = analogRead(lmPin);
+  tempActual = analog* 5000.0  /1023.0 /10.0;  //5V -> 1023
+}
+
+void setup() 
+{
   pinMode (motorPin,OUTPUT);
+  lcd.createChar(0, grado);
   Serial.begin(9600);
   while(!Serial);
 
   lcd.begin(16,2);
+  actualizarTemp();
   printMotorStatusLcd();
   printTempLcd();
+  
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
-  int analog = 0;
+void loop() 
+{
   unsigned  long currentTime = 0;
-  lcd.createChar(0, grado);
   
-  analog = analogRead(lmPin);
-  tempActual = analog* 5000.0  /1023.0 /10.0;  //5V -> 1023
 
+  actualizarTemp();
+  
   currentTime = millis();
   
   if (currentTime - lastPrint > intervalo)
