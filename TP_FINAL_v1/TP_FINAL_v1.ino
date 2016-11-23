@@ -24,11 +24,11 @@ void loop() {
   unsigned long deltaTime = 0;
   float distance = 0;
 
-  digitalWrite (pinTrigger, HIGH); //envio señal ultrasonica
+  digitalWrite (pinTrigger, HIGH); //envio señal ultrasonido
   delayMicroseconds(10); //por 10 microsegundos
   digitalWrite (pinTrigger, LOW); //dejo de enviar la señal
 
-  echoStatus = digitalRead(pinEcho); 
+  echoStatus = digitalRead(pinEcho); //Leo señal de retorno de ultrasonido
 
   while (echoStatus  == LOW)
   {
@@ -49,8 +49,7 @@ void loop() {
     
   deltaTime = lastLowTime - lastHighTime; // Resto los 2 tiempos y me quedo con la diferencia que es la cantidad de tiempo
 
-
-
+  if deltaTime 
 
 
   
