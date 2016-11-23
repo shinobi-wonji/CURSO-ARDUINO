@@ -51,6 +51,8 @@ const int elbowPin = 9;
 const int shoulderPin = 10;
 const int gripperPin = 12;
 
+const int ledPin = 13;
+
 /*
  * Definicion de la conversion de angulo.
  * Cada paso mueve 11.25° o (5.625° x micropaso
@@ -58,7 +60,7 @@ const int gripperPin = 12;
  * Sumado a la reduccion 22/50 de la base
  * que invierte el giro.
  */
-const double stepAngle = 11.25/64*22/50;
+const double stepAngle = -11.25/64*22/50;
 
 /*
  * Tiempos que controlan la velocidad
@@ -146,6 +148,8 @@ void setup()
   pinMode (encoderPin2, INPUT_PULLUP);
   pinMode (encoderSwitchPin, INPUT_PULLUP);
 
+  pinMode (ledPin, OUTPUT);
+
   attachInterrupt(digitalPinToInterrupt(encoderPin1), encoder_interrupt_handler, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderPin2), encoder_interrupt_handler, CHANGE);
 
@@ -198,7 +202,15 @@ void loop()
         if (gripperTarget != gripperPosition)
           pendingMovement = true;
         break;
+      case 'l':
+      case 'L':
+        if (Serial.parseInt() > 0)
+          digitalWrite(ledPin, HIGH);
+        else
+          digitalWrite(ledPin, LOW);
+        break;
       default: // En cualquier otro caso esta fuera del protocolo e ignoro su contenido.
+        Serial.println("Error: Fuera de sequencia");
         Serial.read();
         break;
     }
