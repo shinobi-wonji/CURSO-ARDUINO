@@ -1,6 +1,6 @@
 const int pinTrigger = 4;
 const int pinEcho = 5;
-const int pinLeds = 8;
+const int pinLeds = 6;
 
 
 void setup() {
@@ -49,14 +49,35 @@ void loop() {
     
   deltaTime = lastLowTime - lastHighTime; // Resto los 2 tiempos y me quedo con la diferencia que es la cantidad de tiempo
   distance = (float)deltaTime / 58;
-
-  if (distance > 5)
+      
+  if (distance <= 5 )
   {
-    digitalWrite(pinLeds, LOW);
+    analogWrite(pinLeds, 255);
   }
-  else digitalWrite(pinLeds, HIGH);
-
+  else if (distance > 5 && distance <=8)
+  {
+    analogWrite(pinLeds, 200);
+  }
+  else if (distance > 8 && distance <=10)
+  {
+    analogWrite(pinLeds, 150);
+  }
+  else if (distance > 10 && distance <=12)
+  {
+    analogWrite(pinLeds, 100);
+  }
+  else if (distance > 12 && distance <=15)
+  {
+    analogWrite(pinLeds, 50);
+  }
+  else if (distance > 15)
+  {
+    analogWrite(pinLeds, 0);
+  }
+  
   Serial.print(distance);
   Serial.println(" cm"); 
-
+  Serial.print(deltaTime);
+  Serial.println(" MicroS"); 
+  
 }

@@ -1,6 +1,8 @@
 const int pinTrigger = 4;
 const int pinEcho = 5;
-const int pinLeds = 8;
+const int pinLeds = 6;
+bool state = false;
+int brillo = 0;
 
 
 void setup() {
@@ -13,6 +15,8 @@ void setup() {
   while (!Serial); //Para Arduino Leonardo o Mega, tienen un uso distinto del puerto USB
 
 
+  
+
 }
 
 void loop() {
@@ -23,6 +27,7 @@ void loop() {
   unsigned long lastLowTime = 0;
   unsigned long deltaTime = 0;
   float distance = 0;
+  
 
   digitalWrite (pinTrigger, HIGH); //envio señal ultrasonido
   delayMicroseconds(10); //por 10 microsegundos
@@ -49,14 +54,37 @@ void loop() {
     
   deltaTime = lastLowTime - lastHighTime; // Resto los 2 tiempos y me quedo con la diferencia que es la cantidad de tiempo
   distance = (float)deltaTime / 58;
-
-  if (distance > 5)
+      
+  if (distance <= 5 && state == false)
   {
-    digitalWrite(pinLeds, LOW);
+    while (brillo <= 255)
+    {
+      analogWrite(pinLeds , brillo);
+      brillo++;
+      delay(20);
+    }
+    brillo = 255;
+    state = true;
+  } 
+  else if (distance <= 5 && state == true)
+  {
+    while (brillo >=0)
+    {
+      analogWrite(pinLeds , brillo);
+      brillo--;
+      delay(10);
+    }
+    brillo = 0;
+    state = false;
   }
-  else digitalWrite(pinLeds, HIGH);
+  
 
+    
   Serial.print(distance);
   Serial.println(" cm"); 
-
+  Serial.print(deltaTime);
+  Serial.println(" MicroS"); 
+  Serial.print(brillo);
+  Serial.println(" nivel de brillo"); 
+  
 }
